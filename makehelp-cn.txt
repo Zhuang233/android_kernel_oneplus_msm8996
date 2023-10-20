@@ -1,0 +1,123 @@
+清理目标：
+clean - 删除大部分生成的文件，但保留配置和足够的构建支持来构建外部模块
+mrproper - 删除所有生成的文件 + 配置 + 各种备份文件
+distclean - mrproper + 删除编辑器备份和补丁文件
+
+配置目标：
+config - 使用行为导向的程序更新当前配置
+nconfig - 使用基于ncurses菜单的程序更新当前配置
+menuconfig - 使用基于菜单的程序更新当前配置
+xconfig - 使用基于QT的前端更新当前配置
+gconfig - 使用基于GTK的前端更新当前配置
+oldconfig - 使用提供的.config作为基础更新当前配置
+localmodconfig - 更新当前配置，禁用未加载的模块
+localyesconfig - 更新当前配置，将本地模块转换为核心模块
+silentoldconfig- 与oldconfig相同，但安静地进行，另外更新依赖关系
+defconfig - 使用来自ARCH提供的defconfig的默认配置
+savedefconfig - 将当前配置保存为./defconfig（最小配置）
+allnoconfig - 所有选项都回答为no的新配置
+allyesconfig - 所有选项都接受为yes的新配置
+allmodconfig - 尽可能选择模块的新配置
+alldefconfig - 所有符号设置为默认的新配置
+randconfig - 对所有选项随机回答的新配置
+listnewconfig - 列出新的选项
+olddefconfig - 与silentoldconfig相同，但将新的符号设置为其默认值
+kvmconfig - 启用用于客户机内核支持的附加选项
+tinyconfig - 配置最小的可能内核
+
+其他通用目标：
+all - 构建所有标有[*]的目标
+
+    vmlinux - 构建裸内核
+    modules - 构建所有模块
+    modules_install- 将所有模块安装到INSTALL_MOD_PATH（默认为：/）
+    firmware_install-将所有固件安装到INSTALL_FW_PATH
+    (默认：$(INSTALL_MOD_PATH)/lib/firmware)
+    dir/ - 构建目录及其以下的所有文件
+    dir/file.[oisS]- 只构建指定的目标
+    dir/file.lst - 只构建指定的混合源/汇编目标
+    (需要最新的binutils和最近的构建（System.map）)
+    dir/file.ko - 包括最终链接的构建模块
+    modules_prepare- 为构建外部模块做准备
+    tags/TAGS - 为编辑器生成标签文件
+    cscope - 生成cscope索引
+    gtags - 生成GNU GLOBAL索引
+    kernelrelease - 输出发布版本字符串（使用make -s）
+    kernelversion - 输出存储在Makefile中的版本（使用make -s）
+    image_name - 输出图像名称（使用make -s）
+    headers_install- 将消毒后的内核头文件安装到INSTALL_HDR_PATH
+    (默认：./usr)
+
+静态分析器：
+checkstack - 生成堆栈使用列表
+namespacecheck - 对编译的内核进行名称空间分析
+versioncheck - 对version.h使用进行的健全性检查
+includecheck - 检查重复包含的头文件
+export_report - 列出所有导出符号的使用情况
+headers_check - 对导出的头文件进行的健全性检查
+headerdep - 在头文件中检测包含循环
+coccicheck - 使用Coccinelle进行检查。
+
+内核自测：
+kselftest - 构建并运行内核自测（以root身份运行）
+在运行kselftest之前构建、安装并启动内核
+
+内核打包：
+rpm-pkg - 构建源和二进制RPM内核包
+binrpm-pkg - 仅构建二进制内核包
+deb-pkg - 以deb包格式构建内核
+tar-pkg - 以未压缩的tarball格式构建内核
+targz-pkg - 以gzip压缩的tarball格式构建内核
+tarbz2-pkg - 以bzip2压缩的tarball格式构建内核
+tarxz-pkg - 以xz压缩的tarball格式构建内核
+perf-tar-src-pkg - 构建perf-3.18.20.tar源tarball
+perf-targz-src-pkg - 构建perf-3.18.20.tar.gz源tarball
+perf-tarbz2-src-pkg - 构建perf-3.18.20.tar.bz2源tarball
+perf-tarxz-src-pkg - 构建perf-3.18.20.tar.xz源tarball
+
+文档目标：
+Linux内核内部文档的不同格式：
+htmldocs - HTML
+pdfdocs - PDF
+psdocs - Postscript
+xmldocs - XML DocBook
+mandocs - 手册页面
+installmandocs - 安装由mandocs生成的手册页面
+cleandocs - 清除所有生成的DocBook文件
+
+针对特定架构的目标（arm64）：
+
+    Image.gz - 压缩的内核图像（arch/arm64/boot/Image.gz）
+    Image - 未压缩的内核图像（arch/arm64/boot/Image）
+
+    dtbs - 为启用的主板构建设备树blob
+    dtbs_install - 将dtbs安装到/boot/dtbs/
+    install - 安装未压缩的内核
+    zinstall - 安装压缩的内核
+    使用（您的）~/bin/installkernel或
+    (发行版的) /sbin/installkernel 或
+    安装到$(INSTALL_PATH)并运行lilo
+
+    默认内核压缩选项（如果可用）：GZIP
+    默认内核安装路径：/boot
+
+为了避免Make的冗长的输出，您可以进行以下操作
+(将V=1设置到环境变量或make参数中来覆盖该设置)：
+
+使用V=0（无输出）或make silentoldconfig（新配置）
+
+补丁有时会改变Kconfig文件而不改变Makefile，因此您需要重新运行make
+oldconfig（或make *config），然后重新构建内核。
+
+您只需要通过'runnables'（或使用RUNNABLES_AS_ARGS=y）指定您要运行的
+kselftest来运行一个子集。如果您知道自己在做什么，还可以使用
+run_kselftest.sh来运行您自己的测试。
+
+更多详细信息请查阅Documentation目录下的文档。
+
+注：标有[*]的目标是多目标的。
+
+我们希望您构建的内核是正确的，请仔细阅读
+Documentation/process/changes.rst。
+
+Linux是开源软件，请参考COPYING文件了解许可信息。
